@@ -1,4 +1,4 @@
-export type Result<T> = T | Error;
+export type Result<T> = T | Error
 
 /**
  * Determines if the `Result` is of type `T`.
@@ -12,7 +12,7 @@ export type Result<T> = T | Error;
  * }
  * ```
  */
-export const Ok = <T>(r: Result<T>): r is T => !(r instanceof Error);
+export const Ok = <T>(r: Result<T>): r is T => !(r instanceof Error)
 
 /**
  * Determines if the `Result` is of type `Error`.
@@ -26,7 +26,7 @@ export const Ok = <T>(r: Result<T>): r is T => !(r instanceof Error);
  * }
  * ```
  */
-export const Err = <T>(r: Result<T>): r is Error => !Ok(r);
+export const Err = <T>(r: Result<T>): r is Error => !Ok(r)
 
 /**
  * Wrap your function call in a `Try` to return back a `Result<T>`
@@ -41,12 +41,12 @@ export const Err = <T>(r: Result<T>): r is Error => !Ok(r);
 export const Try = <F extends (...args: any[]) => any>(fn: F) => {
   return (...args: Parameters<typeof fn>): Result<ReturnType<typeof fn>> => {
     try {
-      return fn(...args);
+      return fn(...args)
     } catch (error) {
-      return error as Error;
+      return error as Error
     }
-  };
-};
+  }
+}
 
 /**
  * Wrap your function call in a `TryAsync` to return back a `Promise<Result<T>>`
@@ -66,13 +66,13 @@ export const TryAsync = <F extends (...args: any[]) => Promise<any>>(fn: F) => {
       .then((value) => value)
       .catch((error) => {
         if (error instanceof Error) {
-          return error;
+          return error
         }
 
-        return new Error(JSON.stringify(error));
-      });
-  };
-};
+        return new Error(JSON.stringify(error))
+      })
+  }
+}
 
 /**
  * Unwrap a `Result<T>` and return back the value of type `T`.
@@ -86,8 +86,8 @@ export const TryAsync = <F extends (...args: any[]) => Promise<any>>(fn: F) => {
  * ```
  */
 export const UnwrapOr = <T>(r: Result<T>, fallback: T): T => {
-  return Ok(r) ? r : fallback;
-};
+  return Ok(r) ? r : fallback
+}
 
 /**
  * Unwrap a `Result<T>` and return back the value of type `T`.
@@ -101,6 +101,6 @@ export const UnwrapOr = <T>(r: Result<T>, fallback: T): T => {
  * ```
  */
 export const Unwrap = <T>(r: Result<T>): T => {
-  if (Err(r)) throw r;
-  return r;
-};
+  if (Err(r)) throw r
+  return r
+}
